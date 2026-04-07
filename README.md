@@ -1,27 +1,27 @@
 # CarShip Pro
 
-Plataforma profesional para agencia de autos usados, construida con Next.js 14 (App Router), TypeScript y Tailwind CSS. Consume stock dinámicamente desde Google Sheets con ISR automático.
+> Plataforma profesional para agencia de autos usados. Stock dinámico desde Google Sheets, ISR automático y 3 propuestas visuales listas para elegir.
 
 ---
 
 ## Tabla de Contenidos
 
-1. [Stack tecnológico](#stack)
-2. [Estructura del proyecto](#estructura)
-3. [Las 3 propuestas de diseño](#diseños)
-4. [Configuración de Google Sheets](#google-sheets)
-5. [Manejo de imágenes](#imágenes)
-6. [ISR — Auto-actualización](#isr)
-7. [WhatsApp Integration](#whatsapp)
-8. [Vehículos Vendidos](#vendidos)
-9. [Cómo correr el proyecto](#inicio)
-10. [Variables de entorno](#variables)
-11. [Estructura del Spreadsheet](#spreadsheet)
-12. [Roadmap / Próximos pasos](#roadmap)
+1. [Stack tecnológico](#stack-tecnológico)
+2. [Estructura del proyecto](#estructura-del-proyecto)
+3. [Las 3 propuestas de diseño](#las-3-propuestas-de-diseño)
+4. [Configuración de Google Sheets](#configuración-de-google-sheets)
+5. [Manejo de imágenes](#manejo-de-imágenes)
+6. [ISR — Auto-actualización](#isr--auto-actualización)
+7. [WhatsApp Integration](#whatsapp-integration)
+8. [Vehículos Vendidos](#vehículos-vendidos)
+9. [Cómo correr el proyecto](#cómo-correr-el-proyecto)
+10. [Variables de entorno](#variables-de-entorno)
+11. [Estructura del Spreadsheet](#estructura-del-spreadsheet)
+12. [Roadmap](#roadmap)
 
 ---
 
-## Stack
+## Stack tecnológico
 
 | Tecnología | Versión | Uso |
 |---|---|---|
@@ -34,90 +34,100 @@ Plataforma profesional para agencia de autos usados, construida con Next.js 14 (
 
 ---
 
-## Estructura
+## Estructura del proyecto
 
 ```
 carship-pro/
 ├── src/
 │   ├── app/
-│   │   ├── page.tsx                # Selector de diseño (home)
-│   │   ├── design-a/page.tsx       # Modern Dealer
-│   │   ├── design-b/page.tsx       # High-Conversion
-│   │   ├── design-c/page.tsx       # Luxury Showcase
-│   │   └── api/vehicles/route.ts   # API endpoint con ISR
+│   │   ├── page.tsx                 # Selector de diseño (home)
+│   │   ├── design-a/page.tsx        # Modern Dealer
+│   │   ├── design-b/page.tsx        # High-Conversion
+│   │   ├── design-c/page.tsx        # Luxury Showcase
+│   │   └── api/vehicles/route.ts    # API endpoint con ISR
 │   ├── components/
-│   │   ├── design-a/               # Componentes Modern Dealer
-│   │   ├── design-b/               # Componentes High-Conversion
-│   │   └── design-c/               # Componentes Luxury Showcase
+│   │   ├── design-a/                # Componentes Modern Dealer
+│   │   ├── design-b/                # Componentes High-Conversion
+│   │   └── design-c/                # Componentes Luxury Showcase
 │   ├── lib/
-│   │   ├── google-sheets.ts        # Integración Google Sheets
-│   │   ├── mock-data.ts            # Datos de prueba (12 vehículos)
-│   │   └── utils.ts                # Helpers (precio, km, WhatsApp)
+│   │   ├── google-sheets.ts         # Integración Google Sheets
+│   │   ├── mock-data.ts             # Datos de prueba (12 vehículos)
+│   │   └── utils.ts                 # Helpers (precio, km, WhatsApp)
 │   └── types/
-│       └── vehicle.ts              # Tipos TypeScript
-├── .env.example                    # Variables de entorno de ejemplo
+│       └── vehicle.ts               # Tipos TypeScript
+├── .env.example                     # Variables de entorno de ejemplo
+├── .gitignore
 └── README.md
 ```
 
 ---
 
-## Diseños
+## Las 3 propuestas de diseño
 
-El proyecto incluye 3 propuestas visuales completas. Accedé desde `/` (selector) o directamente:
-
-### `/design-a` — Modern Dealer
-- **Inspiración:** Tesla, Rivian, Kavak
-- **Paleta:** Blanco, Slate-900, Azul (#2563EB)
-- **Características:**
-  - Layout limpio con mucho espacio en blanco
-  - Tipografía sans-serif robusta (Inter)
-  - Cards con hover lift y zoom de imagen
-  - Filtros colapsables en panel
-  - Modal de detalle con specs completos
-  - Botón WhatsApp con mensaje predefinido
-  - Sección "Sobre nosotros" con stats
-
-### `/design-b` — High-Conversion
-- **Inspiración:** Landing pages de alta conversión
-- **Paleta:** Negro (#0A0A0A), Amarillo (#FACC15), Naranja (#F97316)
-- **Características:**
-  - Dark mode total
-  - **Botón flotante de WhatsApp** con mensajes rápidos predefinidos
-  - Filtros horizontales agresivos siempre visibles
-  - Badges de urgencia (disponibles hoy, en línea ahora)
-  - Grid de 4 columnas en desktop para mostrar más stock
-  - Sección de financiación con CTAs
-  - Vehículos vendidos separados al final (grayscale + dimmed)
-
-### `/design-c` — Luxury Showcase
-- **Inspiración:** Rolls-Royce, Ferrari, portafolios de lujo
-- **Paleta:** Negro (#080808), Oro (#C9A96E), Champagne (#E8D5A3)
-- **Características:**
-  - Tipografía display (Playfair Display serif) para títulos
-  - **Animaciones reveal** con IntersectionObserver (sin dependencia pesada)
-  - Hero cinematográfico full-screen con overlay gradiente
-  - Tarjeta "destacado" panorámica 21:9 para el primer vehículo
-  - Vehículos vendidos como galería en escala de grises muy sutil
-  - Líneas doradas como elementos de diseño
-  - Modal minimalista de detalle
-  - Navegación fixed con glassmorphism al scroll
+El proyecto incluye 3 propuestas visuales completas e independientes. Accedé desde `/` (selector) o directamente por URL.
 
 ---
 
-## Google Sheets
+### `/design-a` — Modern Dealer
 
-### Configuración paso a paso
+**Inspiración:** Tesla, Rivian, Kavak  
+**Paleta:** Blanco · Slate-900 · Azul `#2563EB`
 
-#### 1. Crear la Spreadsheet
+- Layout limpio con mucho espacio en blanco
+- Tipografía sans-serif robusta (Inter)
+- Cards con hover lift y zoom de imagen
+- Filtros colapsables en panel lateral
+- Modal de detalle con specs completos
+- Botón WhatsApp con mensaje predefinido
+- Sección "Sobre nosotros" con estadísticas
+
+---
+
+### `/design-b` — High-Conversion
+
+**Inspiración:** Landing pages de alta conversión  
+**Paleta:** Negro `#0A0A0A` · Amarillo `#FACC15` · Naranja `#F97316`
+
+- Dark mode total
+- **Botón flotante de WhatsApp** con mensajes rápidos predefinidos
+- Filtros horizontales agresivos siempre visibles
+- Badges de urgencia (disponibles hoy, en línea ahora)
+- Grid de 4 columnas en desktop para mostrar más stock
+- Sección de financiación con CTAs
+- Vehículos vendidos separados al final (grayscale + dimmed)
+
+---
+
+### `/design-c` — Luxury Showcase
+
+**Inspiración:** Rolls-Royce, Ferrari, portafolios de lujo  
+**Paleta:** Negro `#080808` · Oro `#C9A96E` · Champagne `#E8D5A3`
+
+- Tipografía display (Playfair Display serif) para títulos
+- **Animaciones reveal** con IntersectionObserver
+- Hero cinematográfico full-screen con overlay gradiente
+- Tarjeta "destacado" panorámica 21:9 para el primer vehículo
+- Vehículos vendidos como galería histórica en escala de grises
+- Líneas doradas como elementos de diseño
+- Modal minimalista de detalle
+- Navegación fixed con glassmorphism al scroll
+
+---
+
+## Configuración de Google Sheets
+
+### 1. Crear la Spreadsheet
+
 - Abrí [Google Sheets](https://sheets.google.com)
 - Nombrá la primera hoja (pestaña) como `Stock`
-- Usá este encabezado en la **fila 1** (exactamente así):
+- Usá este encabezado en la **fila 1**:
 
 ```
 ID | Marca | Modelo | Año | Precio | Moneda | KM | Tipo | Imagen URL | Estado | Color | Transmisión | Combustible | Puertas | Descripción | Condición | Destacado
 ```
 
-#### 2. Crear Service Account en Google Cloud
+### 2. Crear una Service Account en Google Cloud
+
 1. Ir a [console.cloud.google.com](https://console.cloud.google.com)
 2. Crear un proyecto nuevo (o usar uno existente)
 3. Ir a **APIs & Services → Biblioteca**
@@ -125,115 +135,115 @@ ID | Marca | Modelo | Año | Precio | Moneda | KM | Tipo | Imagen URL | Estado |
 5. Ir a **APIs & Services → Credenciales**
 6. Click en **"+ Crear credenciales" → Cuenta de servicio**
 7. Darle un nombre y completar el flujo
-8. En la cuenta de servicio creada, ir a **Claves → Agregar clave → JSON**
-9. Descargar el archivo JSON — contiene el `client_email` y `private_key`
+8. En la cuenta creada, ir a **Claves → Agregar clave → JSON**
+9. Descargar el archivo — contiene el `client_email` y `private_key`
 
-#### 3. Compartir el Spreadsheet con la Service Account
+### 3. Compartir el Spreadsheet con la Service Account
+
 - En Google Sheets, click en **Compartir**
 - Pegar el `client_email` del JSON descargado
-- Dar permiso de **"Lector"**
+- Dar permiso de **Lector**
 
-#### 4. Configurar variables de entorno
+### 4. Configurar variables de entorno
+
 ```bash
-# Copiar el archivo de ejemplo
 cp .env.example .env.local
+```
 
-# Completar las variables:
-GOOGLE_SHEETS_ID=         # ID del spreadsheet (en la URL)
+```env
+GOOGLE_SHEETS_ID=         # ID del spreadsheet (está en la URL)
 GOOGLE_CLIENT_EMAIL=      # client_email del JSON
-GOOGLE_PRIVATE_KEY=       # private_key del JSON (entre comillas, con \n)
+GOOGLE_PRIVATE_KEY=       # private_key del JSON
 GOOGLE_SHEETS_TAB=Stock   # Nombre de la pestaña
 ```
 
-> **Tip para la private_key:** En el JSON, la clave viene con saltos de línea reales. En el `.env.local` usá `\n` literal:
+> **Tip para la `private_key`:** En el `.env.local` los saltos de línea deben escribirse como `\n` literal:
 > ```
 > GOOGLE_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQ...\n-----END RSA PRIVATE KEY-----"
 > ```
 
 ---
 
-## Imágenes
+## Manejo de imágenes
 
-### Opción A: Google Drive (recomendado para el dueño)
+### Opción A — Google Drive _(recomendada para el dueño)_
+
 1. Subir la foto del auto a Google Drive
-2. Click derecho → **Compartir** → Cambiar a "Cualquier persona con el enlace" (Lector)
+2. Click derecho → **Compartir** → "Cualquier persona con el enlace" (Lector)
 3. Copiar el enlace: `https://drive.google.com/file/d/FILE_ID/view?usp=sharing`
-4. Pegar esa URL en la columna **Imagen URL** del Spreadsheet
-5. El sistema convierte automáticamente a URL directa: `https://drive.google.com/uc?export=view&id=FILE_ID`
+4. Pegarlo en la columna **Imagen URL** del Spreadsheet
 
-### Opción B: Cloudinary (para mayor control)
+El sistema convierte la URL automáticamente al formato correcto para mostrarla en la web.
+
+### Opción B — Cloudinary
+
 1. Crear cuenta en [cloudinary.com](https://cloudinary.com) (plan gratuito disponible)
 2. Subir las imágenes al Media Library
-3. Copiar la URL `https://res.cloudinary.com/...`
-4. Pegar en la columna **Imagen URL**
+3. Copiar la URL `https://res.cloudinary.com/...` y pegarla en la columna **Imagen URL**
 
-### Opción C: Cualquier URL pública
-Cualquier URL HTTPS que devuelva una imagen JPG/PNG/WebP funciona.
+### Opción C — Cualquier URL pública
+
+Cualquier URL HTTPS que apunte a una imagen JPG, PNG o WebP funciona directamente.
 
 ---
 
 ## ISR — Auto-actualización
 
-El proyecto usa **Incremental Static Regeneration (ISR)** de Next.js:
+El proyecto usa **Incremental Static Regeneration (ISR)** de Next.js con un intervalo de 5 minutos:
 
 ```typescript
-export const revalidate = 300; // 5 minutos
+export const revalidate = 300; // segundos
 ```
 
-Esto significa:
-- La primera visita genera la página estáticamente (rápido)
-- Después de 5 minutos, la próxima visita regenera la página en background
-- **El dueño puede actualizar el precio en el Spreadsheet y en menos de 5 minutos la web se actualiza sola**, sin necesidad de redeploy
+Esto significa que cuando el dueño actualiza un precio o cambia el estado de un vehículo en el Spreadsheet, **la web se actualiza sola dentro de los próximos 5 minutos** sin necesidad de redeploy ni intervención técnica.
 
-Para cambiar el intervalo, modificar `revalidate` en cada `page.tsx` y en `src/app/api/vehicles/route.ts`.
+Para ajustar el intervalo, modificar `revalidate` en cada `page.tsx` y en `src/app/api/vehicles/route.ts`.
 
 ---
 
-## WhatsApp
+## WhatsApp Integration
 
-El botón de WhatsApp envía un mensaje predefinido con los datos del vehículo:
+Cada botón de consulta genera un mensaje predefinido con los datos del vehículo:
 
 ```
-¡Hola! 👋 Me interesa el *Toyota Corolla SEG Hybrid 2023* que vi en el sitio web. ¿Podés darme más información y el precio final? Gracias!
+¡Hola! 👋 Me interesa el *Toyota Corolla SEG Hybrid 2023* que vi en el sitio web.
+¿Podés darme más información y el precio final? Gracias!
 ```
 
 Configurar el número en `.env.local`:
-```
+
+```env
 NEXT_PUBLIC_WHATSAPP_NUMBER=5491112345678
 ```
 
-Formato: código de país + código de área + número, sin `+`, espacios ni guiones.
+El formato es: código de país + código de área + número, sin `+`, espacios ni guiones.
 
-**Ejemplos:**
-- Argentina Buenos Aires: `5491112345678` (54 + 9 + 11 + 1234-5678)
-- Argentina interior: `5493515550000` (54 + 9 + 351 + 555-0000)
-
----
-
-## Vendidos
-
-Cuando en la columna **Estado** del Spreadsheet se coloca `Vendido`:
-
-- **Design A:** La tarjeta se muestra con `opacity-60` y filtro `grayscale`. El botón muestra "No disponible".
-- **Design B:** La tarjeta se muestra al 50% de opacidad y grayscale, separada del stock disponible en una sección propia al final.
-- **Design C:** Los vehículos vendidos aparecen en una galería "Historial" ultra-discreta al final, en escala de grises muy tenues.
-
-Para **ocultar completamente** los vendidos, modificar el filtro en cada componente Grid (cambiar `status: 'all'` por `status: 'Disponible'`).
+| País / Zona | Ejemplo |
+|---|---|
+| Argentina — Buenos Aires | `5491112345678` |
+| Argentina — Interior | `5493515550000` |
 
 ---
 
-## Inicio
+## Vehículos Vendidos
 
-### Prerequisitos
-- Node.js 18+
-- npm o yarn
+Cuando la columna **Estado** del Spreadsheet contiene el valor `Vendido`:
 
-### Instalación
+| Diseño | Comportamiento |
+|---|---|
+| **Design A** | Tarjeta en `grayscale` con `opacity-60`. Botón reemplazado por "No disponible". |
+| **Design B** | Tarjeta al 50% de opacidad y grayscale, agrupada en sección separada al final del stock. |
+| **Design C** | Galería histórica ultra-discreta al final, en escala de grises muy tenue. |
+
+Para **ocultar completamente** los vendidos, cambiar `status: 'all'` por `status: 'Disponible'` en el componente de grilla de cada diseño.
+
+---
+
+## Cómo correr el proyecto
+
+**Requisitos:** Node.js 18+ y npm
 
 ```bash
-# Clonar/acceder al proyecto
-cd carship-pro
-
 # Instalar dependencias
 npm install
 
@@ -241,7 +251,7 @@ npm install
 cp .env.example .env.local
 # Editar .env.local con tus credenciales
 
-# Correr en desarrollo
+# Servidor de desarrollo
 npm run dev
 ```
 
@@ -255,12 +265,13 @@ Abrí [http://localhost:3000](http://localhost:3000) para ver el selector de dis
 | `/design-c` | Luxury Showcase |
 | `/api/vehicles` | API REST del stock |
 
-### Build para producción
-
 ```bash
+# Build de producción
 npm run build
 npm run start
 ```
+
+> Sin credenciales de Google Sheets, el proyecto carga automáticamente 12 vehículos de ejemplo y funciona de forma completa.
 
 ---
 
@@ -275,54 +286,45 @@ npm run start
 | `NEXT_PUBLIC_WHATSAPP_NUMBER` | Recomendada | Número de WhatsApp |
 | `NEXT_PUBLIC_SITE_NAME` | Opcional | Nombre del sitio |
 
-> Sin credenciales de Google Sheets, el proyecto carga automáticamente 12 vehículos de ejemplo (mock data) y funciona completamente.
-
 ---
 
-## Spreadsheet
-
-### Estructura recomendada de columnas
+## Estructura del Spreadsheet
 
 | Columna | Ejemplo | Notas |
 |---|---|---|
 | ID | `1` | Único por fila |
 | Marca | `Toyota` | |
 | Modelo | `Corolla SEG Hybrid` | |
-| Año | `2023` | Número |
+| Año | `2023` | Número entero |
 | Precio | `32000` | Solo números, sin símbolos |
 | Moneda | `USD` | `USD` o `ARS` |
 | KM | `5000` | Solo números |
-| Tipo | `Auto` | Auto / Moto / Camioneta / Pickup / SUV |
+| Tipo | `Auto` | `Auto` / `Moto` / `Camioneta` / `Pickup` / `SUV` |
 | Imagen URL | `https://drive.google.com/...` | URL completa |
-| Estado | `Disponible` | Disponible / Reservado / Vendido |
+| Estado | `Disponible` | `Disponible` / `Reservado` / `Vendido` |
 | Color | `Blanco Perla` | Opcional |
-| Transmisión | `Automático` | Manual / Automático |
-| Combustible | `Híbrido` | Nafta / Diesel / Eléctrico / Híbrido / GNC |
+| Transmisión | `Automático` | `Manual` / `Automático` |
+| Combustible | `Híbrido` | `Nafta` / `Diesel` / `Eléctrico` / `Híbrido` / `GNC` |
 | Puertas | `4` | Número |
 | Descripción | `Toyota Corolla...` | Texto libre |
-| Condición | `Excelente` | Excelente / Muy Bueno / Bueno |
-| Destacado | `Si` | Si / No |
+| Condición | `Excelente` | `Excelente` / `Muy Bueno` / `Bueno` |
+| Destacado | `Si` | `Si` / `No` |
 
-> Los headers son case-insensitive y el sistema normaliza acentos, por lo que `Descripción` y `descripcion` son equivalentes.
+> Los encabezados son case-insensitive y el sistema normaliza acentos, por lo que `Descripción` y `descripcion` son equivalentes.
 
 ---
 
 ## Roadmap
 
-### Próximas mejoras sugeridas
-
-- [ ] **Página individual de vehículo** (`/stock/[id]`) con URL compartible
-- [ ] **Comparador de autos** (seleccionar 2-3 y ver specs lado a lado)
-- [ ] **Formulario de "Vender tu auto"** con envío por email/WhatsApp
-- [ ] **Panel de administración** simple para gestionar estado sin tocar el Spreadsheet
-- [ ] **SEO dinámico** con metadata por vehículo para Google
-- [ ] **Galería de imágenes múltiple** por vehículo (varias fotos en el Spreadsheet separadas por coma)
-- [ ] **Integración Cloudinary** para resize automático de imágenes
-- [ ] **Modo oscuro/claro** toggle en Design A
-- [ ] **Búsqueda por voz** con Web Speech API
+- [ ] Página individual de vehículo (`/stock/[id]`) con URL compartible
+- [ ] Comparador de autos (seleccionar 2-3 y ver specs lado a lado)
+- [ ] Formulario de "Vender tu auto" con envío por email/WhatsApp
+- [ ] Panel de administración simple para gestionar stock sin tocar el Spreadsheet
+- [ ] SEO dinámico con metadata por vehículo para Google
+- [ ] Galería de múltiples imágenes por vehículo (URLs separadas por coma en el Spreadsheet)
+- [ ] Integración Cloudinary para redimensionado automático de imágenes
+- [ ] Toggle modo oscuro/claro en Design A
 
 ---
 
-*Generado con Next.js 14 + Google Sheets API + Tailwind CSS*
-#   c a r s h i p - m v p  
- 
+*Next.js 14 · Google Sheets API · Tailwind CSS*
