@@ -4,6 +4,7 @@ export type Currency = 'USD' | 'ARS';
 export type Transmission = 'Manual' | 'Automático';
 export type FuelType = 'Nafta' | 'Diesel' | 'Eléctrico' | 'Híbrido' | 'GNC';
 export type Condition = 'Excelente' | 'Muy Bueno' | 'Bueno';
+export type VehicleLabel = 'Oportunidad' | 'Nuevo Ingreso' | 'Precio Rebajado' | 'Top';
 
 export interface Vehicle {
   id: string;
@@ -16,6 +17,7 @@ export interface Vehicle {
   type: VehicleType;
   imageUrl: string;
   status: VehicleStatus;
+  label?: VehicleLabel;
   color?: string;
   transmission?: Transmission;
   fuel?: FuelType;

@@ -8,63 +8,73 @@ export default function HeroB() {
 
   return (
     <section className="relative bg-zinc-950 overflow-hidden">
-      {/* Diagonal yellow accent */}
+      {/* Background accents */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-yellow-400/5 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-yellow-400/30 to-transparent" />
+        <div className="absolute top-0 right-0 w-2/3 h-full bg-gradient-to-l from-[#E87800]/6 to-transparent" />
+        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#E87800]/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#E87800]/25 to-transparent" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Text side */}
           <div>
-            {/* Urgency badge */}
-            <div className="inline-flex items-center gap-2 bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-xs font-bold px-3 py-1.5 rounded-full mb-6 uppercase tracking-widest">
-              <span className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse" />
-              🔥 {12} vehículos disponibles hoy
+            <div className="inline-flex items-center gap-2 bg-[#E87800]/10 border border-[#E87800]/30 text-[#E87800] text-xs font-bold px-4 py-1.5 rounded-full mb-8 uppercase tracking-widest">
+              <span className="w-2 h-2 bg-[#E87800] rounded-full animate-pulse" />
+              Stock actualizado — Respondemos al instante
             </div>
 
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-none mb-6">
-              EL AUTO
+            <h1
+              className="text-6xl sm:text-7xl lg:text-8xl font-black text-white leading-[0.92] mb-6 uppercase"
+              style={{ fontFamily: 'var(--font-heading)' }}
+            >
+              TU PRÓXIMO
               <br />
-              <span className="text-yellow-400">QUE QUERÉS</span>
+              <span className="text-[#E87800]">AUTO, MOTO</span>
               <br />
-              <span className="text-zinc-500">AL MEJOR</span>
+              <span className="text-zinc-600">O CAMIONETA</span>
               <br />
-              PRECIO.
+              ESTÁ ACÁ.
             </h1>
 
-            <p className="text-zinc-400 text-lg leading-relaxed mb-8 max-w-lg">
-              Más de 10 autos premium disponibles. Financiación express en 24hs. Respondemos por WhatsApp al instante.
+            <p className="text-zinc-400 text-lg leading-relaxed mb-8 max-w-lg font-medium">
+              En Ruz Automotores encontrás autos, camionetas y motos con financiación express. Respondemos por WhatsApp al instante.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 href="#stock"
-                className="bg-yellow-400 hover:bg-yellow-300 text-zinc-950 px-8 py-4 rounded-xl font-black text-lg transition-colors text-center shadow-xl shadow-yellow-400/20"
+                className="bg-[#E87800] hover:bg-[#F08A00] text-white px-8 py-4 rounded-xl font-black text-lg transition-all text-center shadow-xl shadow-[#E87800]/20 hover:shadow-[#E87800]/30 hover:scale-[1.02] active:scale-[0.98]"
+                style={{ fontFamily: 'var(--font-heading)', letterSpacing: '0.04em' }}
               >
                 VER TODO EL STOCK →
               </Link>
               <a
-                href={`https://wa.me/${phone}?text=${encodeURIComponent('¡Hola! Quiero saber más sobre el stock disponible.')}`}
+                href={`https://wa.me/${phone}?text=${encodeURIComponent('¡Hola! Vengo de la página de Ruz Automotores y quiero saber más sobre el stock disponible.')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 border-2 border-zinc-700 hover:border-green-500 text-white px-8 py-4 rounded-xl font-bold text-lg transition-colors"
+                className="flex items-center justify-center gap-2 border-2 border-zinc-700 hover:border-green-500/60 text-white hover:text-green-400 px-8 py-4 rounded-xl font-bold text-lg transition-all"
               >
-                <span className="text-green-400">●</span> WhatsApp directo
+                <span className="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse" />
+                WhatsApp directo
               </a>
             </div>
 
             {/* Social proof */}
-            <div className="flex flex-wrap items-center gap-6 mt-10 pt-8 border-t border-zinc-800">
+            <div className="flex flex-wrap items-center gap-8 mt-10 pt-8 border-t border-zinc-800/60">
               {[
-                { value: '500+', label: 'Clientes satisfechos', color: 'text-yellow-400' },
-                { value: '24hs', label: 'Respuesta garantizada', color: 'text-orange-400' },
-                { value: '0%', label: 'Comisión oculta', color: 'text-green-400' },
+                { value: '500+', label: 'Clientes satisfechos', color: 'text-[#E87800]' },
+                { value: '24hs', label: 'Respuesta garantizada', color: 'text-white' },
+                { value: '0%', label: 'Comisión oculta', color: 'text-white' },
               ].map((s) => (
                 <div key={s.label}>
-                  <div className={`text-3xl font-black ${s.color}`}>{s.value}</div>
-                  <div className="text-xs text-zinc-500 mt-0.5">{s.label}</div>
+                  <div
+                    className={`text-4xl font-black ${s.color}`}
+                    style={{ fontFamily: 'var(--font-heading)' }}
+                  >
+                    {s.value}
+                  </div>
+                  <div className="text-xs text-zinc-500 mt-0.5 font-medium uppercase tracking-wide">{s.label}</div>
                 </div>
               ))}
             </div>
@@ -72,26 +82,37 @@ export default function HeroB() {
 
           {/* Image side */}
           <div className="relative">
-            <div className="aspect-[4/3] rounded-2xl overflow-hidden">
+            <div className="aspect-[4/3] rounded-2xl overflow-hidden ring-1 ring-zinc-800">
               <Image
                 src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=900&q=85"
-                alt="Auto CarShip"
+                alt="Ruz Automotores"
                 fill
                 className="object-cover"
                 priority
               />
-              {/* Yellow border accent */}
-              <div className="absolute inset-0 ring-2 ring-yellow-400/20 rounded-2xl" />
+              <div className="absolute inset-0 ring-2 ring-[#E87800]/15 rounded-2xl" />
+              {/* Orange corner accent */}
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#E87800] via-[#F08A00] to-transparent" />
             </div>
 
-            {/* Floating badge */}
-            <div className="absolute -top-4 -left-4 bg-yellow-400 text-zinc-950 rounded-2xl px-4 py-3 shadow-xl">
-              <div className="text-2xl font-black">⚡</div>
-              <div className="text-xs font-black uppercase">Financiación</div>
-              <div className="text-xs font-black">express 24hs</div>
+            {/* Floating badge — financing */}
+            <div className="absolute -top-4 -left-4 bg-[#E87800] text-white rounded-2xl px-4 py-3 shadow-2xl shadow-[#E87800]/30">
+              <div
+                className="text-2xl font-black leading-none"
+                style={{ fontFamily: 'var(--font-heading)' }}
+              >
+                24hs
+              </div>
+              <div className="text-xs font-bold uppercase tracking-wide mt-0.5">Financiación</div>
+              <div className="text-xs font-medium opacity-80">express</div>
             </div>
-            <div className="absolute -bottom-4 -right-4 bg-zinc-900 border border-zinc-700 rounded-2xl px-4 py-3 shadow-xl">
-              <div className="text-green-400 font-black text-sm">● EN LÍNEA</div>
+
+            {/* Floating badge — online */}
+            <div className="absolute -bottom-4 -right-4 bg-zinc-900 border border-zinc-700 rounded-2xl px-4 py-3 shadow-2xl">
+              <div className="text-green-400 font-bold text-sm flex items-center gap-1.5">
+                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                EN LÍNEA
+              </div>
               <div className="text-zinc-400 text-xs mt-0.5">Respondemos ahora</div>
             </div>
           </div>

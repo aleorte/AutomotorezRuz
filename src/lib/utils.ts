@@ -7,6 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatPrice(price: number, currency: 'USD' | 'ARS'): string {
+  if (!price || price === 0) return 'Consultar precio';
   if (currency === 'USD') {
     return new Intl.NumberFormat('es-AR', {
       style: 'currency',
@@ -36,11 +37,24 @@ export function getWhatsAppPhone(): string {
   return process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5491112345678';
 }
 
-// Convert Google Drive share URL to direct image URL
+// Convert Google Drive/Photos URL to a proxied or direct image URL
 export function convertGoogleDriveUrl(url: string): string {
   if (!url) return '';
-  const match = url.match(/drive\.google\.com\/file\/d\/([^/]+)/);
-  if (match) return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+
+  // Google Drive share URL → direct view URL
+  const driveMatch = url.match(/drive\.google\.com\/file\/d\/([^/]+)/);
+  if (driveMatch) {
+    return `/api/image-proxy?url=${encodeURIComponent(`https://drive.google.com/uc?export=view&id=${driveMatch[1]}`)}`;
+  }
+
+  // Google Photos / usercontent URLs → route through proxy to handle auth
+  if (
+    url.includes('usercontent.google.com') ||
+    url.includes('googleusercontent.com')
+  ) {
+    return `/api/image-proxy?url=${encodeURIComponent(url)}`;
+  }
+
   return url;
 }
 

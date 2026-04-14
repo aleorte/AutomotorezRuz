@@ -1,11 +1,11 @@
-import { Vehicle, VehicleStatus, VehicleType, Currency, Transmission, FuelType, Condition } from '@/types/vehicle';
+import { Vehicle, VehicleStatus, VehicleType, Currency, Transmission, FuelType, VehicleLabel } from '@/types/vehicle';
 import { MOCK_VEHICLES } from './mock-data';
 import { convertGoogleDriveUrl } from './utils';
 
 const SPREADSHEET_ID = process.env.GOOGLE_SHEETS_ID;
 const CLIENT_EMAIL = process.env.GOOGLE_CLIENT_EMAIL;
 const PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
-const SHEETS_TAB = process.env.GOOGLE_SHEETS_TAB || 'Stock';
+const SHEETS_TAB = process.env.GOOGLE_SHEETS_TAB || 'En Venta';
 
 function normalizeStatus(raw: string): VehicleStatus {
   const s = raw?.trim().toLowerCase();
@@ -23,43 +23,88 @@ function normalizeType(raw: string): VehicleType {
   return 'Auto';
 }
 
-function mapRowToVehicle(row: string[], headers: string[]): Vehicle | null {
+function normalizeTransmission(raw: string): Transmission | undefined {
+  const t = raw?.trim().toLowerCase();
+  if (t === 'automatico' || t === 'automático' || t === 'automatica' || t === 'automática') return 'Automático';
+  if (t === 'manual') return 'Manual';
+  return undefined;
+}
+
+function normalizeLabel(raw: string): VehicleLabel | undefined {
+  const l = raw?.trim().toLowerCase();
+  if (l === 'oportunidad') return 'Oportunidad';
+  if (l === 'nuevo ingreso') return 'Nuevo Ingreso';
+  if (l === 'precio rebajado') return 'Precio Rebajado';
+  if (l === 'top') return 'Top';
+  return undefined;
+}
+
+function normalizeFuel(raw: string): FuelType | undefined {
+  const f = raw?.trim().toLowerCase();
+  if (f === 'nafta' || f === 'gasolina' || f === 'naphtha') return 'Nafta';
+  if (f === 'diesel' || f === 'gasoil') return 'Diesel';
+  if (f === 'gnc' || f === 'gas') return 'GNC';
+  if (f === 'electrico' || f === 'eléctrico' || f === 'electric') return 'Eléctrico';
+  if (f === 'hibrido' || f === 'híbrido' || f === 'hybrid') return 'Híbrido';
+  return undefined;
+}
+
+// "$9.600.000" → 9600000  (punto = separador de miles en formato AR)
+function parseARS(raw: string): number {
+  if (!raw) return 0;
+  return parseInt(raw.replace(/[.$\s]/g, '')) || 0;
+}
+
+// "Usd$22.000" → 22000
+function parseUSD(raw: string): number {
+  if (!raw) return 0;
+  return parseInt(raw.replace(/[Uu][Ss][Dd]/g, '').replace(/[.$\s]/g, '')) || 0;
+}
+
+function normalizeKey(header: string): string {
+  return header
+    .toLowerCase()
+    .trim()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '_');
+}
+
+function mapRowToVehicle(row: string[], headers: string[], index: number): Vehicle | null {
   const data: Record<string, string> = {};
   headers.forEach((h, i) => {
-    // Normalize header keys: lowercase, remove accents, trim
-    const key = h
-      .toLowerCase()
-      .trim()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/\s+/g, '_');
-    data[key] = (row[i] || '').trim();
+    data[normalizeKey(h)] = (row[i] || '').trim();
   });
 
-  if (!data.id && !data.marca) return null;
+  // Columnas reales del sheet: Operación, Tipo, Marca, Modelo, Versión, Año, Km,
+  // Valor pesos, Valor dólares, Links, WhatsApp Directo
+  if (!data.marca && !data.modelo) return null;
 
-  const rawImageUrl = data.imagen_url || data.imagen || data.imagenurl || data.foto || '';
+  const priceUSD = parseUSD(data.valor_dolares);
+  const priceARS = parseARS(data.valor_pesos);
+  const price = priceUSD > 0 ? priceUSD : priceARS;
+  const currency: Currency = priceUSD > 0 ? 'USD' : 'ARS';
+
+  const version = data.version || '';
+  const model = version ? `${data.modelo} ${version}` : data.modelo;
 
   return {
-    id: data.id || String(Math.random()),
+    id: `${data.marca}-${data.modelo}-${data.ano}-${index}`
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9-]/g, ''),
     brand: data.marca || 'Sin marca',
-    model: data.modelo || 'Sin modelo',
-    year: parseInt(data.ano || data.year) || new Date().getFullYear(),
-    price: parseFloat(data.precio?.replace(/[.,]/g, (m, o, s) =>
-      s.lastIndexOf(',') > s.lastIndexOf('.') ? (m === ',' ? '.' : '') : m === '.' ? '' : '.'
-    )) || 0,
-    currency: (data.moneda?.toUpperCase() as Currency) || 'USD',
+    model: model || 'Sin modelo',
+    year: parseInt(data.ano) || new Date().getFullYear(),
+    price,
+    currency,
     km: parseInt(data.km?.replace(/\D/g, '') || '0'),
     type: normalizeType(data.tipo),
-    imageUrl: convertGoogleDriveUrl(rawImageUrl),
-    status: normalizeStatus(data.estado),
-    color: data.color || undefined,
-    transmission: data.transmision as Transmission || undefined,
-    fuel: data.combustible as FuelType || undefined,
-    doors: parseInt(data.puertas) || undefined,
-    description: data.descripcion || undefined,
-    condition: data.condicion as Condition || undefined,
-    featured: data.destacado?.toLowerCase() === 'si' || data.destacado?.toLowerCase() === 'sí',
+    imageUrl: convertGoogleDriveUrl(data.links || ''),
+    status: normalizeStatus(data.operacion),
+    label: normalizeLabel(data.etiqueta || ''),
+    transmission: normalizeTransmission(data.transmision || data.caja || ''),
+    fuel: normalizeFuel(data.combustible || data.nafta || ''),
   };
 }
 
@@ -88,7 +133,7 @@ export async function getVehiclesFromSheets(): Promise<Vehicle[]> {
 
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEETS_TAB}!A:R`,
+      range: `${SHEETS_TAB}!A:N`,
     });
 
     const rows = response.data.values;
@@ -101,7 +146,7 @@ export async function getVehiclesFromSheets(): Promise<Vehicle[]> {
     const vehicles = rows
       .slice(1)
       .filter((row) => row.some((cell) => cell?.toString().trim()))
-      .map((row) => mapRowToVehicle(row as string[], headers))
+      .map((row, i) => mapRowToVehicle(row as string[], headers, i))
       .filter((v): v is Vehicle => v !== null);
 
     return vehicles.length > 0 ? vehicles : MOCK_VEHICLES;
@@ -111,24 +156,17 @@ export async function getVehiclesFromSheets(): Promise<Vehicle[]> {
   }
 }
 
-// ─── Estructura recomendada del Google Spreadsheet ────────────────────────────
-// Nombre de la hoja: "Stock"
+// ─── Estructura del Google Spreadsheet ───────────────────────────────────────
 // Columnas (fila 1 = headers, fila 2 en adelante = datos):
 //
-// | ID | Marca | Modelo | Año | Precio | Moneda | KM | Tipo | Imagen URL | Estado | Color | Transmisión | Combustible | Puertas | Descripción | Condición | Destacado |
+// A: Operación  B: Etiqueta  C: Tipo  D: Marca  E: Modelo  F: Versión
+// G: Año  H: Km  I: Valor pesos  J: Valor dólares  K: Transmisión
+// L: Combustible  M: Links (imagen)  N: WhatsApp Directo
 //
 // Valores válidos:
-//   Estado: Disponible | Reservado | Vendido
-//   Tipo: Auto | Moto | Camioneta | Pickup | SUV
-//   Moneda: USD | ARS
-//   Transmisión: Manual | Automático
-//   Combustible: Nafta | Diesel | Eléctrico | Híbrido | GNC
-//   Condición: Excelente | Muy Bueno | Bueno
-//   Destacado: Si | No
-//
-// Para imágenes desde Google Drive:
-//   1. Subir la imagen a Drive
-//   2. Click derecho → "Obtener enlace" → Cambiar a "Cualquier persona con el enlace"
-//   3. Copiar el enlace (formato: https://drive.google.com/file/d/FILE_ID/view?usp=sharing)
-//   4. Pegar la URL completa en la columna "Imagen URL"
-//   El sistema la convierte automáticamente al formato correcto.
+//   Operación: En Venta | Vendido | Reservado
+//   Etiqueta (opcional): Oportunidad | Nuevo Ingreso | Precio Rebajado | Top
+//   Tipo: Auto | Moto | Camioneta | SUV | Pickup
+//   Valor pesos: $9.600.000  (punto como separador de miles)
+//   Valor dólares: Usd$22.000  (punto como separador de miles)
+//   Links: URL de imagen (Google Photos, Drive, etc.) — proxiada server-side

@@ -3,7 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --font-inter: 'Inter', system-ui, sans-serif;
+  --font-body: 'Barlow', system-ui, sans-serif;
+  --font-heading: 'Barlow Condensed', 'Barlow', system-ui, sans-serif;
+  --brand: #E87800;
 }
 
 @layer base {
@@ -20,13 +22,31 @@
   }
 
   body {
-    font-family: var(--font-inter);
+    font-family: var(--font-body);
   }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  .skeleton-shimmer {
+    background: linear-gradient(
+      90deg,
+      #27272a 0%,
+      #3f3f46 40%,
+      #52525b 50%,
+      #3f3f46 60%,
+      #27272a 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
   }
 
   /* Grayscale effect for sold vehicles */

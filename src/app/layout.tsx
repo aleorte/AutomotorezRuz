@@ -3,17 +3,17 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: {
-    default: 'CarShip — Tu próximo auto te está esperando',
-    template: '%s | CarShip',
+    default: 'Ruz Automotores — Tu próximo auto te está esperando',
+    template: '%s | Ruz Automotores',
   },
   description:
-    'CarShip: La agencia de autos usados más confiable. Stock actualizado, financiación flexible y atención personalizada. Buenos Aires, Argentina.',
-  keywords: ['autos usados', 'venta de autos', 'carship', 'automotora', 'financiación'],
-  authors: [{ name: 'CarShip' }],
+    'Ruz Automotores: tu automotora de confianza. Stock actualizado de autos, camionetas y motos. Financiación express y atención personalizada.',
+  keywords: ['autos usados', 'venta de autos', 'ruz automotores', 'automotora', 'financiación', 'camionetas', 'motos'],
+  authors: [{ name: 'Ruz Automotores' }],
   openGraph: {
     type: 'website',
     locale: 'es_AR',
-    siteName: 'CarShip',
+    siteName: 'Ruz Automotores',
   },
 };
 
@@ -24,7 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=Barlow+Condensed:wght@600;700;800;900&display=swap"
           rel="stylesheet"
         />
       </head>

@@ -235,11 +235,11 @@ export const MOCK_VEHICLES: Vehicle[] = [
 ];
 
 export const MOCK_COMPANY = {
-  name: 'CarShip',
+  name: 'Ruz Automotores',
   tagline: 'Tu próximo auto te está esperando',
   phone: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5491112345678',
   address: 'Av. del Libertador 5000, Buenos Aires',
-  email: 'ventas@carship.ar',
+  email: 'ventas@ruzautomotores.ar',
   hours: 'Lunes a Sábados de 9 a 19hs',
-  instagram: 'https://instagram.com/carship.ar',
+  instagram: 'https://instagram.com/ruzautomotores',
 };

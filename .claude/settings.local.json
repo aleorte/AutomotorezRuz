@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p C:/Projects/CARSHIP-Project/carship-pro/public)",
+      "Bash(cp \"C:/Projects/CARSHIP-Project/carship-pro/media/Logo Ruz.jpg\" C:/Projects/CARSHIP-Project/carship-pro/public/logo-ruz.jpg)",
+      "Bash(npm run:*)"
+    ]
+  }
+}

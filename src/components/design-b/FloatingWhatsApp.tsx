@@ -24,7 +24,7 @@ export default function FloatingWhatsApp() {
                 <MessageCircle className="w-4 h-4 text-white" />
               </div>
               <div>
-                <div className="text-white font-bold text-sm">CarShip</div>
+                <div className="text-white font-bold text-sm">Ruz Automotores</div>
                 <div className="text-green-400 text-xs">● En línea ahora</div>
               </div>
             </div>
@@ -64,8 +64,8 @@ export default function FloatingWhatsApp() {
         )}
         {/* Ping animation */}
         {!open && (
-          <span className="absolute top-0 right-0 w-4 h-4 bg-yellow-400 rounded-full border-2 border-zinc-950 flex items-center justify-center">
-            <span className="text-zinc-950 text-[8px] font-black">!</span>
+          <span className="absolute top-0 right-0 w-4 h-4 bg-[#E87800] rounded-full border-2 border-zinc-950 flex items-center justify-center">
+            <span className="text-white text-[8px] font-black">!</span>
           </span>
         )}
       </button>

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Zap } from 'lucide-react';
+import Image from 'next/image';
 import { MOCK_COMPANY } from '@/lib/mock-data';
 
 export default function FooterB() {
@@ -10,12 +10,20 @@ export default function FooterB() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-yellow-400 rounded-lg flex items-center justify-center">
-                <Zap className="w-4 h-4 text-zinc-950 fill-zinc-950" />
+            <div className="flex items-center gap-3 mb-4">
+              <div className="relative h-10 w-10 rounded-lg overflow-hidden shrink-0">
+                <Image
+                  src="/logo-ruz.jpg"
+                  alt="Ruz Automotores"
+                  fill
+                  className="object-contain"
+                />
               </div>
-              <span className="font-black text-white text-xl">
-                Car<span className="text-yellow-400">Ship</span>
+              <span
+                className="font-black text-white text-xl leading-none"
+                style={{ fontFamily: 'var(--font-heading)' }}
+              >
+                RUZ<span className="text-[#E87800]"> AUTOMOTORES</span>
               </span>
             </div>
             <p className="text-zinc-500 text-sm leading-relaxed">
@@ -27,11 +35,11 @@ export default function FooterB() {
             <h3 className="text-zinc-400 font-bold text-xs uppercase tracking-widest mb-4">Acceso rápido</h3>
             <ul className="space-y-2">
               {[
-                { label: 'Ver Stock', href: '/design-b#stock' },
-                { label: 'Financiación', href: '/design-b#financiacion' },
+                { label: 'Ver Stock', href: '/#stock' },
+                { label: 'Financiación', href: '/#financiacion' },
               ].map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="text-zinc-500 hover:text-yellow-400 text-sm transition-colors">
+                  <Link href={item.href} className="text-zinc-500 hover:text-[#E87800] text-sm transition-colors font-medium">
                     {item.label}
                   </Link>
                 </li>
@@ -47,16 +55,16 @@ export default function FooterB() {
               href={`https://wa.me/${company.phone}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-zinc-950 px-4 py-2 rounded-lg text-sm font-black transition-colors"
+              className="inline-flex items-center gap-2 bg-[#E87800] hover:bg-[#F08A00] text-white px-4 py-2.5 rounded-lg text-sm font-black tracking-wide transition-colors"
+              style={{ fontFamily: 'var(--font-heading)' }}
             >
-              ⚡ WHATSAPP DIRECTO
+              WHATSAPP DIRECTO →
             </a>
           </div>
         </div>
 
         <div className="border-t border-zinc-900 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-zinc-700 text-xs">
           <span>© {new Date().getFullYear()} {company.name}. Todos los derechos reservados.</span>
-          <Link href="/" className="hover:text-zinc-500 transition-colors">← Volver al selector de diseño</Link>
         </div>
       </div>
     </footer>
