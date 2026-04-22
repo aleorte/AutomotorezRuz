@@ -9,7 +9,7 @@ export default function FloatingWhatsApp() {
 
   const quickMessages = [
     { label: 'Ver stock disponible', msg: '¡Hola! Quiero ver el stock disponible.' },
-    { label: 'Consultar financiación', msg: '¡Hola! Me interesa saber sobre las opciones de financiación.' },
+    { label: 'Vender mi auto', msg: '¡Hola! Quiero vender mi auto. ¿Me podés asesorar?' },
     { label: 'Hablar con un asesor', msg: '¡Hola! Quiero hablar con un asesor.' },
   ];
 

@@ -88,7 +88,7 @@ export default function VehicleGridB({ vehicles }: Props) {
 
             {/* Type pills */}
             <div className="flex gap-2 flex-wrap">
-              {['all', 'Auto', 'Pickup', 'SUV', 'Moto'].map((t) => (
+              {['all', 'Auto', 'Camioneta', 'SUV', 'Moto'].map((t) => (
                 <button
                   key={t}
                   onClick={() => setType(t)}

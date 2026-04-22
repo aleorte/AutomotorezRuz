@@ -26,7 +26,8 @@ export function formatKm(km: number): string {
   return new Intl.NumberFormat('es-AR').format(km) + ' km';
 }
 
-export function buildWhatsAppUrl(vehicle: Vehicle, phone: string): string {
+export function buildWhatsAppUrl(vehicle: Vehicle, fallbackPhone: string): string {
+  const phone = vehicle.whatsappNumber || fallbackPhone;
   const message = encodeURIComponent(
     `¡Hola! 👋 Me interesa el *${vehicle.brand} ${vehicle.model} ${vehicle.year}* que vi en el sitio web. ¿Podés darme más información y el precio final? Gracias!`
   );

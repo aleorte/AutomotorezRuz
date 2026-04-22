@@ -36,7 +36,6 @@ export default function HeaderB() {
           <nav className="hidden md:flex items-center gap-8">
             {[
               { label: 'Stock', href: '/#stock' },
-              { label: 'Financiación', href: '/#financiacion' },
               { label: 'Contacto', href: '/#contacto' },
             ].map((item) => (
               <Link
@@ -78,7 +77,6 @@ export default function HeaderB() {
         <div className="md:hidden border-t border-zinc-800 bg-zinc-950 px-4 py-4 flex flex-col gap-2">
           {[
             { label: 'Stock', href: '/#stock' },
-            { label: 'Financiación', href: '/#financiacion' },
             { label: 'Contacto', href: '/#contacto' },
           ].map((item) => (
             <Link
