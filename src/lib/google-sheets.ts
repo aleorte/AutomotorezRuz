@@ -11,14 +11,14 @@ function normalizeStatus(raw: string): VehicleStatus {
   const s = raw?.trim().toLowerCase();
   if (s === 'vendido' || s === 'sold') return 'Vendido';
   if (s === 'reservado' || s === 'reserved') return 'Reservado';
+  if (s === 'oculto' || s === 'hidden') return 'Oculto';
   return 'Disponible';
 }
 
 function normalizeType(raw: string): VehicleType {
   const t = raw?.trim().toLowerCase();
   if (t === 'moto' || t === 'motocicleta') return 'Moto';
-  if (t === 'camioneta') return 'Camioneta';
-  if (t === 'pickup') return 'Pickup';
+  if (t === 'camioneta' || t === 'pickup') return 'Camioneta';
   if (t === 'suv') return 'SUV';
   return 'Auto';
 }
@@ -101,10 +101,11 @@ function mapRowToVehicle(row: string[], headers: string[], index: number): Vehic
     km: parseInt(data.km?.replace(/\D/g, '') || '0'),
     type: normalizeType(data.tipo),
     imageUrl: convertGoogleDriveUrl(data.links || ''),
-    status: normalizeStatus(data.operacion),
+    status: normalizeStatus(data.operacion || data.estado || ''),
     label: normalizeLabel(data.etiqueta || ''),
     transmission: normalizeTransmission(data.transmision || data.caja || ''),
     fuel: normalizeFuel(data.combustible || data.nafta || ''),
+    whatsappNumber: data.whatsapp_directo || undefined,
   };
 }
 
@@ -147,7 +148,7 @@ export async function getVehiclesFromSheets(): Promise<Vehicle[]> {
       .slice(1)
       .filter((row) => row.some((cell) => cell?.toString().trim()))
       .map((row, i) => mapRowToVehicle(row as string[], headers, i))
-      .filter((v): v is Vehicle => v !== null);
+      .filter((v): v is Vehicle => v !== null && v.status !== 'Oculto');
 
     return vehicles.length > 0 ? vehicles : MOCK_VEHICLES;
   } catch (error) {
@@ -166,7 +167,8 @@ export async function getVehiclesFromSheets(): Promise<Vehicle[]> {
 // Valores válidos:
 //   Operación: En Venta | Vendido | Reservado
 //   Etiqueta (opcional): Oportunidad | Nuevo Ingreso | Precio Rebajado | Top
-//   Tipo: Auto | Moto | Camioneta | SUV | Pickup
+//   Tipo: Auto | Moto | Camioneta | SUV  (Pickup también se normaliza a Camioneta)
+//   Estado/Operación: En Venta | Disponible | Vendido | Reservado | Oculto
 //   Valor pesos: $9.600.000  (punto como separador de miles)
 //   Valor dólares: Usd$22.000  (punto como separador de miles)
 //   Links: URL de imagen (Google Photos, Drive, etc.) — proxiada server-side

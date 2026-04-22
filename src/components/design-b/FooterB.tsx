@@ -27,7 +27,7 @@ export default function FooterB() {
               </span>
             </div>
             <p className="text-zinc-500 text-sm leading-relaxed">
-              La forma más rápida de conseguir tu auto. Stock actualizado, financiación express y respuesta inmediata.
+              Los buenos negocios se hacen con buenas personas. Stock actualizado y respuesta inmediata por WhatsApp.
             </p>
           </div>
 
@@ -36,7 +36,7 @@ export default function FooterB() {
             <ul className="space-y-2">
               {[
                 { label: 'Ver Stock', href: '/#stock' },
-                { label: 'Financiación', href: '/#financiacion' },
+                { label: 'Contacto', href: '/#contacto' },
               ].map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className="text-zinc-500 hover:text-[#E87800] text-sm transition-colors font-medium">

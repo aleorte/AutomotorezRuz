@@ -1,5 +1,5 @@
-export type VehicleStatus = 'Disponible' | 'Reservado' | 'Vendido';
-export type VehicleType = 'Auto' | 'Moto' | 'Camioneta' | 'SUV' | 'Pickup';
+export type VehicleStatus = 'Disponible' | 'Reservado' | 'Vendido' | 'Oculto';
+export type VehicleType = 'Auto' | 'Moto' | 'Camioneta' | 'SUV';
 export type Currency = 'USD' | 'ARS';
 export type Transmission = 'Manual' | 'Automático';
 export type FuelType = 'Nafta' | 'Diesel' | 'Eléctrico' | 'Híbrido' | 'GNC';
@@ -25,6 +25,7 @@ export interface Vehicle {
   description?: string;
   condition?: Condition;
   featured?: boolean;
+  whatsappNumber?: string;
 }
 
 export interface VehicleFilters {

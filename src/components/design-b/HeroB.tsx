@@ -25,20 +25,18 @@ export default function HeroB() {
             </div>
 
             <h1
-              className="text-6xl sm:text-7xl lg:text-8xl font-black text-white leading-[0.92] mb-6 uppercase"
+              className="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.0] mb-6"
               style={{ fontFamily: 'var(--font-heading)' }}
             >
-              TU PRÓXIMO
+              LOS BUENOS NEGOCIOS
               <br />
-              <span className="text-[#E87800]">AUTO, MOTO</span>
+              <span className="text-[#E87800]">SE HACEN CON</span>
               <br />
-              <span className="text-zinc-600">O CAMIONETA</span>
-              <br />
-              ESTÁ ACÁ.
+              BUENAS PERSONAS.
             </h1>
 
             <p className="text-zinc-400 text-lg leading-relaxed mb-8 max-w-lg font-medium">
-              En Ruz Automotores encontrás autos, camionetas y motos con financiación express. Respondemos por WhatsApp al instante.
+              En Ruz Automotores encontrás autos, camionetas y motos. Trato directo, precio real y respuesta inmediata por WhatsApp.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
@@ -57,6 +55,15 @@ export default function HeroB() {
               >
                 <span className="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse" />
                 WhatsApp directo
+              </a>
+              <a
+                href={`https://wa.me/${phone}?text=${encodeURIComponent('¡Hola! Quiero vender mi auto. ¿Me podés asesorar?')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 border-2 border-[#E87800]/50 hover:border-[#E87800] text-[#E87800] hover:text-white hover:bg-[#E87800] px-8 py-4 rounded-xl font-black text-lg transition-all text-center"
+                style={{ fontFamily: 'var(--font-heading)', letterSpacing: '0.03em' }}
+              >
+                VENDE TU AUTO CON NOSOTROS
               </a>
             </div>
 
@@ -82,29 +89,30 @@ export default function HeroB() {
 
           {/* Image side */}
           <div className="relative">
-            <div className="aspect-[4/3] rounded-2xl overflow-hidden ring-1 ring-zinc-800">
+            <div className="aspect-[16/10] rounded-2xl overflow-hidden ring-1 ring-zinc-800">
               <Image
-                src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=900&q=85"
-                alt="Ruz Automotores"
+                src="/hero.jpeg"
+                alt="Ruz Automotores — Sunchales, Santa Fe"
                 fill
-                className="object-cover"
+                className="object-cover object-center"
                 priority
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
               <div className="absolute inset-0 ring-2 ring-[#E87800]/15 rounded-2xl" />
               {/* Orange corner accent */}
               <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#E87800] via-[#F08A00] to-transparent" />
             </div>
 
-            {/* Floating badge — financing */}
+            {/* Floating badge — stock */}
             <div className="absolute -top-4 -left-4 bg-[#E87800] text-white rounded-2xl px-4 py-3 shadow-2xl shadow-[#E87800]/30">
               <div
                 className="text-2xl font-black leading-none"
                 style={{ fontFamily: 'var(--font-heading)' }}
               >
-                24hs
+                STOCK
               </div>
-              <div className="text-xs font-bold uppercase tracking-wide mt-0.5">Financiación</div>
-              <div className="text-xs font-medium opacity-80">express</div>
+              <div className="text-xs font-bold uppercase tracking-wide mt-0.5">Siempre</div>
+              <div className="text-xs font-medium opacity-80">actualizado</div>
             </div>
 
             {/* Floating badge — online */}
