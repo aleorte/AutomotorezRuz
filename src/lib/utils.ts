@@ -27,7 +27,10 @@ export function formatKm(km: number): string {
 }
 
 export function buildWhatsAppUrl(vehicle: Vehicle, fallbackPhone: string): string {
-  const phone = vehicle.whatsappNumber || fallbackPhone;
+  const wa = vehicle.whatsappNumber;
+  // Sheet column "WhatsApp Directo" already contains the full wa.me URL
+  if (wa?.startsWith('http')) return wa;
+  const phone = wa || fallbackPhone;
   const message = encodeURIComponent(
     `¡Hola! 👋 Me interesa el *${vehicle.brand} ${vehicle.model} ${vehicle.year}* que vi en el sitio web. ¿Podés darme más información y el precio final? Gracias!`
   );
