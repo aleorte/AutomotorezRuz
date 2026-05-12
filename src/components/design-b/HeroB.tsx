@@ -9,16 +9,28 @@ export default function HeroB() {
   const waStock = `https://wa.me/${phone}?text=${encodeURIComponent('¡Hola! Vengo de la página de Ruz Automotores y quiero saber más sobre el stock disponible.')}`;
   const waSell  = `https://wa.me/${phone}?text=${encodeURIComponent('¡Hola! Quiero vender mi auto. ¿Me podés asesorar?')}`;
 
+  const slogan = (
+    <p
+      className="font-black text-2xl lg:text-3xl leading-tight mb-5"
+      style={{ fontFamily: 'var(--font-heading)' }}
+    >
+      <span className="text-white">En Ruz Automotores: </span>
+      <span className="text-[#E87800]">buenos negocios y buenas personas.</span>
+    </p>
+  );
+
   const ctaButtons = (
     <>
+      {/* En Stock — ahora con estilo outline (swap desde Vende) */}
       <Link
         href="#stock"
-        className="bg-[#E87800] hover:bg-[#F08A00] text-white px-7 py-3.5 rounded-xl font-black text-base lg:text-lg transition-all text-center shadow-xl shadow-[#E87800]/30 hover:shadow-[#E87800]/50 hover:scale-[1.02] active:scale-[0.98]"
-        style={{ fontFamily: 'var(--font-heading)', letterSpacing: '0.04em' }}
+        className="flex items-center justify-center border border-[#E87800]/50 hover:border-[#E87800] text-[#E87800] hover:text-white hover:bg-[#E87800] px-7 py-3.5 rounded-xl font-black text-base lg:text-lg transition-all text-center"
+        style={{ fontFamily: 'var(--font-heading)', letterSpacing: '0.03em' }}
       >
         VER TODO EL STOCK →
       </Link>
 
+      {/* WhatsApp — sin cambios */}
       <a
         href={waStock}
         target="_blank"
@@ -29,12 +41,13 @@ export default function HeroB() {
         WhatsApp directo
       </a>
 
+      {/* Vende con nosotros — ahora relleno naranja (swap desde En Stock) */}
       <a
         href={waSell}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-center border border-[#E87800]/50 hover:border-[#E87800] text-[#E87800] hover:text-white hover:bg-[#E87800] px-7 py-3.5 rounded-xl font-black text-base lg:text-lg transition-all text-center"
-        style={{ fontFamily: 'var(--font-heading)', letterSpacing: '0.03em' }}
+        className="bg-[#E87800] hover:bg-[#F08A00] text-white px-7 py-3.5 rounded-xl font-black text-base lg:text-lg transition-all text-center shadow-xl shadow-[#E87800]/30 hover:shadow-[#E87800]/50 hover:scale-[1.02] active:scale-[0.98]"
+        style={{ fontFamily: 'var(--font-heading)', letterSpacing: '0.04em' }}
       >
         VENDE TU AUTO CON NOSOTROS
       </a>
@@ -72,6 +85,7 @@ export default function HeroB() {
                 En línea · Respondemos ahora
               </span>
             </div>
+            {slogan}
             <div className="flex flex-row gap-3 flex-wrap">
               {ctaButtons}
             </div>
@@ -87,6 +101,7 @@ export default function HeroB() {
             En línea · Respondemos ahora
           </span>
         </div>
+        {slogan}
         <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3">
           {ctaButtons}
         </div>

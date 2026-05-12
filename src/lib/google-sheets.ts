@@ -5,7 +5,7 @@ import { convertGoogleDriveUrl } from './utils';
 const SPREADSHEET_ID = process.env.GOOGLE_SHEETS_ID;
 const CLIENT_EMAIL = process.env.GOOGLE_CLIENT_EMAIL;
 const PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
-const SHEETS_TAB = process.env.GOOGLE_SHEETS_TAB || 'En Venta';
+const SHEETS_TAB = process.env.GOOGLE_SHEETS_TAB || 'Hoja 1';
 
 function normalizeStatus(raw: string): VehicleStatus {
   const s = raw?.trim().toLowerCase();
@@ -134,7 +134,7 @@ export async function getVehiclesFromSheets(): Promise<Vehicle[]> {
 
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEETS_TAB}!A:N`,
+      range: `'${SHEETS_TAB}'!A:N`,
     });
 
     const rows = response.data.values;
