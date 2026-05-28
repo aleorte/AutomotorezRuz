@@ -64,7 +64,18 @@ export default function FooterB() {
         </div>
 
         <div className="border-t border-zinc-900 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-zinc-700 text-xs">
-          <span>© {new Date().getFullYear()} {company.name}. Todos los derechos reservados.</span>
+          <div className="flex items-center gap-2 flex-wrap justify-center sm:justify-start">
+            <span>© {new Date().getFullYear()} {company.name}. Todos los derechos reservados.</span>
+            <span aria-hidden="true">·</span>
+            <a
+              href="https://devlloni.me"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-zinc-300 transition-colors"
+            >
+              Desarrollado por Lautaro Delloni
+            </a>
+          </div>
         </div>
       </div>
     </footer>
