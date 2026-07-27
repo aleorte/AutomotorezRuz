@@ -213,15 +213,15 @@ Cada botón de consulta genera un mensaje predefinido con los datos del vehícul
 Configurar el número en `.env.local`:
 
 ```env
-NEXT_PUBLIC_WHATSAPP_NUMBER=5491112345678
+NEXT_PUBLIC_WHATSAPP_NUMBER=543493459503
 ```
 
 El formato es: código de país + código de área + número, sin `+`, espacios ni guiones.
 
 | País / Zona | Ejemplo |
 |---|---|
-| Argentina — Buenos Aires | `5491112345678` |
-| Argentina — Interior | `5493515550000` |
+| Argentina — Sunchales (número del sitio) | `543493459503` |
+| Argentina — Buenos Aires | `5491155550000` |
 
 ---
 
