@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 export default function HeroB() {
-  const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5491112345678';
+  const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '543493459503';
 
   const waStock = `https://wa.me/${phone}?text=${encodeURIComponent('¡Hola! Vengo de la página de Ruz Automotores y quiero saber más sobre el stock disponible.')}`;
   const waSell  = `https://wa.me/${phone}?text=${encodeURIComponent('¡Hola! Quiero vender mi auto. ¿Me podés asesorar?')}`;

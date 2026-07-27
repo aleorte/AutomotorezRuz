@@ -11,6 +11,20 @@ export const metadata: Metadata = {
     'Ruz Automotores: tu automotora de confianza. Stock actualizado de autos, camionetas y motos. Financiación express y atención personalizada.',
   keywords: ['autos usados', 'venta de autos', 'ruz automotores', 'automotora', 'financiación', 'camionetas', 'motos'],
   authors: [{ name: 'Ruz Automotores' }],
+  manifest: '/site.webmanifest',
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-16x16.png', type: 'image/png', sizes: '16x16' },
+      { url: '/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
+      { url: '/favicon-48x48.png', type: 'image/png', sizes: '48x48' },
+      { url: '/favicon-64x64.png', type: 'image/png', sizes: '64x64' },
+      { url: '/android-chrome-192x192.png', type: 'image/png', sizes: '192x192' },
+      { url: '/android-chrome-512x512.png', type: 'image/png', sizes: '512x512' },
+    ],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
+    shortcut: ['/favicon.ico'],
+  },
   openGraph: {
     type: 'website',
     locale: 'es_AR',

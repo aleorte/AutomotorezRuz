@@ -237,8 +237,8 @@ export const MOCK_VEHICLES: Vehicle[] = [
 export const MOCK_COMPANY = {
   name: 'Ruz Automotores',
   tagline: 'Tu próximo auto te está esperando',
-  phone: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5491112345678',
-  address: 'Av. del Libertador 5000, Buenos Aires',
+  phone: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '543493459503',
+  address: 'Alem 657, Sunchales, Santa Fe',
   email: 'ventas@ruzautomotores.ar',
   hours: 'Lunes a Sábados de 9 a 19hs',
   instagram: 'https://instagram.com/ruzautomotores',

@@ -38,7 +38,7 @@ export function buildWhatsAppUrl(vehicle: Vehicle, fallbackPhone: string): strin
 }
 
 export function getWhatsAppPhone(): string {
-  return process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5491112345678';
+  return process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '543493459503';
 }
 
 // Convert Google Drive/Photos URL to a proxied or direct image URL

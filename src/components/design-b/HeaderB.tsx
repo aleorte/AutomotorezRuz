@@ -7,7 +7,7 @@ import { Menu, X, Phone } from 'lucide-react';
 
 export default function HeaderB() {
   const [open, setOpen] = useState(false);
-  const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5491112345678';
+  const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '543493459503';
 
   return (
     <header className="sticky top-0 z-50 bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800/60">
