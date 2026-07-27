@@ -225,17 +225,21 @@ El formato es: código de país + código de área + número, sin `+`, espacios 
 
 ---
 
-## Vehículos Vendidos
+## Estado de los vehículos
 
-Cuando la columna **Estado** del Spreadsheet contiene el valor `Vendido`:
+La columna **Estado** del Spreadsheet decide si el vehículo se publica o no:
 
-| Diseño | Comportamiento |
-|---|---|
-| **Design A** | Tarjeta en `grayscale` con `opacity-60`. Botón reemplazado por "No disponible". |
-| **Design B** | Tarjeta al 50% de opacidad y grayscale, agrupada en sección separada al final del stock. |
-| **Design C** | Galería histórica ultra-discreta al final, en escala de grises muy tenue. |
+| Valor en la hoja | ¿Se publica? | Comportamiento |
+|---|---|---|
+| `Disponible` (o celda vacía) | Sí | Tarjeta normal, con botón de consulta por WhatsApp. |
+| `Reservado` | Sí | Tarjeta normal con badge "Reservado". |
+| `Vendido` | **No** | Se filtra en `getVehiclesFromSheets()`. |
+| `No disponible` | **No** | Se normaliza a `Oculto` y se filtra. |
+| `Oculto` | **No** | Se filtra. |
 
-Para **ocultar completamente** los vendidos, cambiar `status: 'all'` por `status: 'Disponible'` en el componente de grilla de cada diseño.
+El filtro es único y vive en `src/lib/google-sheets.ts` (`isPublishable`), así que ni la grilla ni la API `/api/vehicles` reciben vehículos que no correspondan.
+
+> Cualquier valor no reconocido en la columna Estado se trata como `Disponible`. Si el cliente inventa un valor nuevo para dar de baja un auto, hay que sumarlo a `normalizeStatus()` o el auto va a seguir apareciendo.
 
 ---
 

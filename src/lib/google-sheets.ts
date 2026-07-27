@@ -12,7 +12,14 @@ function normalizeStatus(raw: string): VehicleStatus {
   if (s === 'vendido' || s === 'sold') return 'Vendido';
   if (s === 'reservado' || s === 'reserved') return 'Reservado';
   if (s === 'oculto' || s === 'hidden') return 'Oculto';
+  if (s === 'no disponible' || s === 'not available') return 'Oculto';
   return 'Disponible';
+}
+
+// Solo se publican los vehículos que siguen en stock.
+// "Vendido" y "Oculto" (incluye "No disponible") no salen en la web.
+function isPublishable(vehicle: Vehicle): boolean {
+  return vehicle.status !== 'Oculto' && vehicle.status !== 'Vendido';
 }
 
 function normalizeType(raw: string): VehicleType {
@@ -115,7 +122,7 @@ export async function getVehiclesFromSheets(): Promise<Vehicle[]> {
     if (process.env.NODE_ENV !== 'production') {
       console.log('[CarShip] Usando datos mock (sin credenciales de Google Sheets)');
     }
-    return MOCK_VEHICLES;
+    return MOCK_VEHICLES.filter(isPublishable);
   }
 
   try {
@@ -148,27 +155,31 @@ export async function getVehiclesFromSheets(): Promise<Vehicle[]> {
       .slice(1)
       .filter((row) => row.some((cell) => cell?.toString().trim()))
       .map((row, i) => mapRowToVehicle(row as string[], headers, i))
-      .filter((v): v is Vehicle => v !== null && v.status !== 'Oculto');
+      .filter((v): v is Vehicle => v !== null && isPublishable(v));
 
-    return vehicles.length > 0 ? vehicles : MOCK_VEHICLES;
+    return vehicles.length > 0 ? vehicles : MOCK_VEHICLES.filter(isPublishable);
   } catch (error) {
     console.error('[CarShip] Error fetching Google Sheets:', error);
-    return MOCK_VEHICLES;
+    return MOCK_VEHICLES.filter(isPublishable);
   }
 }
 
 // ─── Estructura del Google Spreadsheet ───────────────────────────────────────
 // Columnas (fila 1 = headers, fila 2 en adelante = datos):
 //
-// A: Operación  B: Etiqueta  C: Tipo  D: Marca  E: Modelo  F: Versión
+// A: Estado  B: Etiqueta  C: Tipo  D: Marca  E: Modelo  F: Versión
 // G: Año  H: Km  I: Valor pesos  J: Valor dólares  K: Transmisión
 // L: Combustible  M: Links (imagen)  N: WhatsApp Directo
 //
 // Valores válidos:
-//   Operación: En Venta | Vendido | Reservado
 //   Etiqueta (opcional): Oportunidad | Nuevo Ingreso | Precio Rebajado | Top
 //   Tipo: Auto | Moto | Camioneta | SUV  (Pickup también se normaliza a Camioneta)
-//   Estado/Operación: En Venta | Disponible | Vendido | Reservado | Oculto
+//   Estado: Disponible | Reservado | Vendido | No disponible | Oculto
+//
+// Qué se publica en la web según Estado:
+//   Disponible / vacío / cualquier otro valor → se publica en el stock
+//   Reservado                                 → se publica con badge "Reservado"
+//   Vendido | No disponible | Oculto          → NO se publica
 //   Valor pesos: $9.600.000  (punto como separador de miles)
 //   Valor dólares: Usd$22.000  (punto como separador de miles)
 //   Links: URL de imagen (Google Photos, Drive, etc.) — proxiada server-side
