@@ -55,11 +55,7 @@ export default function VehicleGridB({ vehicles }: Props) {
   );
 
   const phone = getWhatsAppPhone();
-  const available = useMemo(
-    () => filtered.filter((v) => v.status !== 'Vendido').sort(sortByLabel),
-    [filtered]
-  );
-  const sold = filtered.filter((v) => v.status === 'Vendido');
+  const available = useMemo(() => [...filtered].sort(sortByLabel), [filtered]);
   const hasLabeled = available.some((v) => !!v.label);
 
   return (
@@ -119,9 +115,6 @@ export default function VehicleGridB({ vehicles }: Props) {
 
           <div className="mt-3 text-xs text-zinc-500 flex items-center gap-2">
             <span className="text-[#E87800] font-bold">{available.length}</span> disponibles
-            {sold.length > 0 && (
-              <><span className="text-zinc-700">•</span><span>{sold.length} vendidos</span></>
-            )}
             {hasLabeled && !search && type === 'all' && brand === 'all' && (
               <span className="ml-1 text-zinc-600">• <span className="text-[#E87800]">{available.filter(v => v.label).length}</span> destacados</span>
             )}
@@ -137,35 +130,18 @@ export default function VehicleGridB({ vehicles }: Props) {
         </div>
 
         {/* Vehicle grid */}
-        {available.length === 0 && sold.length === 0 ? (
+        {available.length === 0 ? (
           <div className="text-center py-20">
             <div className="text-5xl mb-4">⚡</div>
             <h3 className="text-xl font-black text-white mb-2">Sin resultados</h3>
             <p className="text-zinc-500 mb-6">Probá con otros filtros.</p>
           </div>
         ) : (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-10">
-              {available.map((v, idx) => (
-                <VehicleCardB key={v.id} vehicle={v} phone={phone} onSelect={setSelected} priority={idx < 4} />
-              ))}
-            </div>
-
-            {sold.length > 0 && (
-              <div>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="h-px flex-1 bg-zinc-800" />
-                  <span className="text-zinc-600 text-xs font-bold uppercase tracking-widest">Vendidos recientemente</span>
-                  <div className="h-px flex-1 bg-zinc-800" />
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {sold.map((v) => (
-                    <VehicleCardB key={v.id} vehicle={v} phone={phone} onSelect={setSelected} priority={false} />
-                  ))}
-                </div>
-              </div>
-            )}
-          </>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {available.map((v, idx) => (
+              <VehicleCardB key={v.id} vehicle={v} phone={phone} onSelect={setSelected} priority={idx < 4} />
+            ))}
+          </div>
         )}
       </div>
 
