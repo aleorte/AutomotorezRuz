@@ -32,8 +32,9 @@ export interface VehicleFilters {
   search: string;
   type: string;
   brand: string;
-  minPrice: number;
-  maxPrice: number;
+  minPrice: number | null;
+  maxPrice: number | null;
+  currency: Currency | 'all';
   minYear: number;
   maxYear: number;
   status: string;
@@ -43,8 +44,9 @@ export const DEFAULT_FILTERS: VehicleFilters = {
   search: '',
   type: 'all',
   brand: 'all',
-  minPrice: 0,
-  maxPrice: 150000,
+  minPrice: null,
+  maxPrice: null,
+  currency: 'all',
   minYear: 2010,
   maxYear: new Date().getFullYear() + 1,
   status: 'all',

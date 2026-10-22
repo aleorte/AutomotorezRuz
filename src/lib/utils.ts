@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { Vehicle } from '@/types/vehicle';
+import { Currency, Vehicle } from '@/types/vehicle';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -72,13 +72,18 @@ export function filterVehicles(
     search: string;
     type: string;
     brand: string;
-    minPrice: number;
-    maxPrice: number;
+    minPrice: number | null;
+    maxPrice: number | null;
+    currency: Currency | 'all';
     minYear: number;
     maxYear: number;
     status: string;
   }
 ): Vehicle[] {
+  const minPrice = filters.minPrice != null && filters.minPrice > 0 ? filters.minPrice : null;
+  const maxPrice = filters.maxPrice != null && filters.maxPrice > 0 ? filters.maxPrice : null;
+  const priceActive = minPrice != null || maxPrice != null;
+
   return vehicles.filter((vehicle) => {
     const searchLower = filters.search.toLowerCase();
     if (
@@ -91,9 +96,15 @@ export function filterVehicles(
 
     if (filters.type !== 'all' && vehicle.type !== filters.type) return false;
     if (filters.brand !== 'all' && vehicle.brand !== filters.brand) return false;
-    if (vehicle.price < filters.minPrice || vehicle.price > filters.maxPrice) return false;
     if (vehicle.year < filters.minYear || vehicle.year > filters.maxYear) return false;
     if (filters.status !== 'all' && vehicle.status !== filters.status) return false;
+
+    if (priceActive) {
+      if (!vehicle.price) return false;
+      if (filters.currency !== 'all' && vehicle.currency !== filters.currency) return false;
+      if (minPrice != null && vehicle.price < minPrice) return false;
+      if (maxPrice != null && vehicle.price > maxPrice) return false;
+    }
 
     return true;
   });

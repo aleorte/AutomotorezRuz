@@ -116,13 +116,18 @@ function mapRowToVehicle(row: string[], headers: string[], index: number): Vehic
   };
 }
 
+function fallbackVehicles(reason: string): Vehicle[] {
+  if (process.env.NODE_ENV === 'production') {
+    console.error(`[CarShip] ${reason}`);
+    return [];
+  }
+  console.warn(`[CarShip] ${reason}. Usando datos de ejemplo.`);
+  return MOCK_VEHICLES.filter(isPublishable);
+}
+
 export async function getVehiclesFromSheets(): Promise<Vehicle[]> {
-  // No credentials → use mock data
   if (!SPREADSHEET_ID || !CLIENT_EMAIL || !PRIVATE_KEY) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('[CarShip] Usando datos mock (sin credenciales de Google Sheets)');
-    }
-    return MOCK_VEHICLES.filter(isPublishable);
+    return fallbackVehicles('Sin credenciales de Google Sheets');
   }
 
   try {
@@ -146,21 +151,18 @@ export async function getVehiclesFromSheets(): Promise<Vehicle[]> {
 
     const rows = response.data.values;
     if (!rows || rows.length < 2) {
-      console.warn('[CarShip] Google Sheets vacío, usando mock data');
-      return MOCK_VEHICLES;
+      return fallbackVehicles('Google Sheets vacío o sin filas de stock');
     }
 
     const headers = rows[0] as string[];
-    const vehicles = rows
+    return rows
       .slice(1)
       .filter((row) => row.some((cell) => cell?.toString().trim()))
       .map((row, i) => mapRowToVehicle(row as string[], headers, i))
       .filter((v): v is Vehicle => v !== null && isPublishable(v));
-
-    return vehicles.length > 0 ? vehicles : MOCK_VEHICLES.filter(isPublishable);
   } catch (error) {
     console.error('[CarShip] Error fetching Google Sheets:', error);
-    return MOCK_VEHICLES.filter(isPublishable);
+    return fallbackVehicles('No se pudo leer Google Sheets');
   }
 }
 

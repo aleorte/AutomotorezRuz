@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import Image from 'next/image';
-import { Vehicle, VehicleLabel } from '@/types/vehicle';
+import { Currency, Vehicle, VehicleLabel } from '@/types/vehicle';
 import { formatPrice, formatKm, buildWhatsAppUrl, getUniqueBrands, filterVehicles, getWhatsAppPhone } from '@/lib/utils';
 import { Search, X, Gauge, Fuel, MessageCircle, ChevronDown } from 'lucide-react';
 
@@ -32,13 +32,80 @@ function sortByLabel(a: Vehicle, b: Vehicle): number {
   return pa - pb;
 }
 
+function parsePriceDigits(digits: string): number | null {
+  if (!digits) return null;
+  const n = Number.parseInt(digits, 10);
+  return Number.isFinite(n) && n > 0 ? n : null;
+}
+
+function formatGroupedDigits(digits: string): string {
+  const n = parsePriceDigits(digits);
+  if (n == null) return '';
+  return new Intl.NumberFormat('es-AR', { maximumFractionDigits: 0 }).format(n);
+}
+
+function PriceField({
+  label,
+  digits,
+  onDigits,
+}: {
+  label: string;
+  digits: string;
+  onDigits: (value: string) => void;
+}) {
+  const accessible = label === 'Mín' ? 'Precio mínimo' : 'Precio máximo';
+
+  return (
+    <div className="relative min-w-0 flex-1 sm:flex-none sm:w-36">
+      <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[10px] font-bold uppercase tracking-wider text-zinc-500">
+        {label}
+      </span>
+      <input
+        type="text"
+        inputMode="numeric"
+        autoComplete="off"
+        aria-label={accessible}
+        placeholder="—"
+        value={formatGroupedDigits(digits)}
+        onChange={(e) => onDigits(e.target.value.replace(/\D/g, '').slice(0, 12))}
+        className="w-full pl-11 pr-7 py-2.5 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-600 text-sm focus:outline-none focus:border-[#E87800] transition-colors"
+      />
+      {digits ? (
+        <button
+          type="button"
+          aria-label={`Borrar ${accessible.toLowerCase()}`}
+          onClick={() => onDigits('')}
+          className="absolute right-2.5 top-1/2 -translate-y-1/2"
+        >
+          <X className="w-3.5 h-3.5 text-zinc-500" />
+        </button>
+      ) : null}
+    </div>
+  );
+}
+
 export default function VehicleGridB({ vehicles }: Props) {
   const [search, setSearch] = useState('');
   const [type, setType] = useState('all');
   const [brand, setBrand] = useState('all');
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+  const [priceCurrency, setPriceCurrency] = useState<Currency>('USD');
   const [selected, setSelected] = useState<Vehicle | null>(null);
 
   const brands = useMemo(() => getUniqueBrands(vehicles), [vehicles]);
+  const currencies = useMemo(() => {
+    const present = new Set<Currency>();
+    for (const vehicle of vehicles) present.add(vehicle.currency);
+    return (['USD', 'ARS'] as const).filter((currency) => present.has(currency));
+  }, [vehicles]);
+  const hasBothCurrencies = currencies.length > 1;
+  const effectiveCurrency: Currency = currencies.length === 1 ? currencies[0] : priceCurrency;
+  const minValue = parsePriceDigits(minPrice);
+  const maxValue = parsePriceDigits(maxPrice);
+  const priceActive = minValue != null || maxValue != null;
+  const priceInvalid = minValue != null && maxValue != null && minValue > maxValue;
+
   const filtered = useMemo(
     () =>
       filterVehicles(vehicles, {
@@ -46,17 +113,34 @@ export default function VehicleGridB({ vehicles }: Props) {
         type,
         brand,
         status: 'all',
-        minPrice: 0,
-        maxPrice: Number.MAX_SAFE_INTEGER,
-        minYear: 2000,
-        maxYear: 2030,
+        minPrice: minValue,
+        maxPrice: maxValue,
+        currency: priceActive ? effectiveCurrency : 'all',
+        minYear: 0,
+        maxYear: 9999,
       }),
-    [vehicles, search, type, brand]
+    [vehicles, search, type, brand, minValue, maxValue, priceActive, effectiveCurrency]
   );
+
+  const clearFilters = () => {
+    setSearch('');
+    setType('all');
+    setBrand('all');
+    setMinPrice('');
+    setMaxPrice('');
+    setPriceCurrency('USD');
+  };
 
   const phone = getWhatsAppPhone();
   const available = useMemo(() => [...filtered].sort(sortByLabel), [filtered]);
   const hasLabeled = available.some((v) => !!v.label);
+  const filtersActive = Boolean(search) || type !== 'all' || brand !== 'all' || priceActive;
+  const priceSummary = priceActive && !priceInvalid
+    ? [
+        minValue != null ? `desde ${formatPrice(minValue, effectiveCurrency)}` : '',
+        maxValue != null ? `hasta ${formatPrice(maxValue, effectiveCurrency)}` : '',
+      ].filter(Boolean).join(' ')
+    : '';
 
   return (
     <section id="stock" className="bg-zinc-950 py-12">
@@ -111,16 +195,56 @@ export default function VehicleGridB({ vehicles }: Props) {
               </select>
               <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-500 pointer-events-none" />
             </div>
+
+            <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 shrink-0">
+                Precio
+              </span>
+              {hasBothCurrencies ? (
+                <div className="flex gap-1 shrink-0" role="group" aria-label="Moneda del precio">
+                  {currencies.map((currency) => (
+                    <button
+                      key={currency}
+                      type="button"
+                      aria-pressed={effectiveCurrency === currency}
+                      onClick={() => setPriceCurrency(currency)}
+                      className={`px-2.5 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-colors ${
+                        effectiveCurrency === currency
+                          ? 'bg-[#E87800] text-white'
+                          : 'bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-700'
+                      }`}
+                    >
+                      {currency}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <span className="text-[10px] font-bold uppercase tracking-widest text-[#E87800] shrink-0">
+                  {effectiveCurrency}
+                </span>
+              )}
+              <div className="flex gap-2 w-full sm:w-auto flex-1 sm:flex-none">
+                <PriceField label="Mín" digits={minPrice} onDigits={setMinPrice} />
+                <PriceField label="Máx" digits={maxPrice} onDigits={setMaxPrice} />
+              </div>
+            </div>
           </div>
 
-          <div className="mt-3 text-xs text-zinc-500 flex items-center gap-2">
+          <div className="mt-3 text-xs text-zinc-500 flex items-center gap-2 flex-wrap">
             <span className="text-[#E87800] font-bold">{available.length}</span> disponibles
-            {hasLabeled && !search && type === 'all' && brand === 'all' && (
-              <span className="ml-1 text-zinc-600">• <span className="text-[#E87800]">{available.filter(v => v.label).length}</span> destacados</span>
+            {hasLabeled && !filtersActive && (
+              <span className="text-zinc-600">• <span className="text-[#E87800]">{available.filter(v => v.label).length}</span> destacados</span>
             )}
-            {(search || type !== 'all' || brand !== 'all') && (
+            {priceInvalid && (
+              <span className="text-[#E87800]">El mínimo es mayor que el máximo</span>
+            )}
+            {priceSummary && (
+              <span className="text-zinc-600">• {priceSummary}</span>
+            )}
+            {filtersActive && (
               <button
-                onClick={() => { setSearch(''); setType('all'); setBrand('all'); }}
+                type="button"
+                onClick={clearFilters}
                 className="ml-auto text-zinc-600 hover:text-[#E87800] transition-colors font-medium"
               >
                 Limpiar filtros ×
@@ -130,11 +254,24 @@ export default function VehicleGridB({ vehicles }: Props) {
         </div>
 
         {/* Vehicle grid */}
-        {available.length === 0 ? (
+        {vehicles.length === 0 ? (
+          <div className="text-center py-20">
+            <div className="text-5xl mb-4">⚡</div>
+            <h3 className="text-xl font-black text-white mb-2">Sin vehículos publicados</h3>
+            <p className="text-zinc-500 mb-6">El stock se va a mostrar acá cuando haya autos disponibles.</p>
+          </div>
+        ) : available.length === 0 ? (
           <div className="text-center py-20">
             <div className="text-5xl mb-4">⚡</div>
             <h3 className="text-xl font-black text-white mb-2">Sin resultados</h3>
             <p className="text-zinc-500 mb-6">Probá con otros filtros.</p>
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="text-sm font-bold text-[#E87800] hover:text-white transition-colors"
+            >
+              Limpiar filtros ×
+            </button>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
